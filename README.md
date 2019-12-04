@@ -42,6 +42,10 @@ Keep `requirements.txt` with hardcoded packages versions always! A years later, 
 
 It is possible to use "more-like-this" and "rank". Did not investigate in that yet, but have googled the first and saw an answer.
 
+This package extends Model layer functionality, you simply describe, what model you would like to be indexed in ES, then the package tracks changes(I found problems in that part) and keeps ES sync with Postgres. In other words, we have duplicated data in both DBs, but in ES exactly the data, we want to be stored there and indexed. Like with DRF, which makes you have `serializers.py`, Dj ES DSL asks you to have `documents.py`, where you simply describe relations between models and documents(ES entities). So we work with search functionality like it's a 2nd Model layer in the pattern. Also it is possible to covert found ES data in to models queryset(Django model layer list of entities), so we can use it any were in Django.
+
+Regarding the problem I found. The documentation of the Django Ealasticsearch DSL says, that every time we save an object of a model, for which we have document in terms of DE DSL, DE DSL saves it to ES. So we have synced data both places. Unfortunately, I did not aim this behavior on tests with the Car app. It may be, because I missed some settings parameter, or Django and DE DSL versions incompatibility(I'm using latest 2.x LTS Django version), any way, if the problem persists, the solution is to handle Django signal, emitted from just saved object, and sync PostgreSQL and ES. I also suggest to have the parameter of DE DSL explicitly off and to have our own parameter in the `settings.py`, which turns on/off our own signals handling, for a case, when the problem be fixed by package developers.
+
 ## Permissions restriction
 
 There are two ways to implement that: on DRF permissions level, or selectors level, making decorator wrapper over them.

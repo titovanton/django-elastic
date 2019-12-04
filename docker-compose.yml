@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+
+  backend:
+    build: .
+    image: tcxautodialer:backend
+    user: docker:docker
+    command: ping github.com
+    env_file: .env
+    environment:
+      - "PYTHONUNBUFFERED=1"
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+      - elastic
+    links:
+      - postgres
+      - elastic
+    volumes:
+      - ./:/app
+
+  postgres:
+    image: postgres:12.1-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+    container_name: elastic
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+
+  flake:
+    image: flake:anton
+    command: bash -c "cd /home/docker && gulp"
+    user: docker:docker
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app

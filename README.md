@@ -32,7 +32,7 @@ I suggest to use Docker and in a future - to deploy with Kubernetes, to aim max 
 
 Keep `requirements.txt` with hardcoded packages versions always! A years later, when the client would hire some other programmer, it will save his time and prevent package versions conflicts. Upgrading a package, make sure all tests are passed and of course, update `requirements.py`.
 
-- `Django v2.2`, because of current Elasticsearch integration does not support 3.0.
+- `Django v2.2.8`, because of current Elasticsearch integration does not support 3.0.
 - `Django Rest Framework for APIs`.
 - `pytest` - tests engine
 - `Faker and mommy` - robust population for test purposes.

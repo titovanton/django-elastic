@@ -1,7 +1,7 @@
 # backend
 Django==2.2.13
 psycopg2-binary==2.8.4
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 
 # tests
 pytest==5.3.1
